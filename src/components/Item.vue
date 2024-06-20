@@ -12,10 +12,10 @@ defineProps({
 
 <template>
     <div
-        class="relative border border-slate-100 rounded-3xl cursor-pointer p-8 hover:-translate-y-2 hover:shadow-xl transition bg-white">
+        class="flex flex-col relative border border-slate-100 rounded-3xl cursor-pointer p-8 hover:-translate-y-2 hover:shadow-xl transition bg-white">
         <img @click="onClickFavorite" :src="!isFavorite ? '/like-1.svg' : '/like-2.svg'" alt="Like 1"
             class="absolute top-8 left-8" />
-        <img :src="imageUrl" alt="Item" />
+        <img :src="imageUrl" alt="Item" class="w-60 self-center"/>
 
         <p class="mt-2">{{ name }}</p>
 

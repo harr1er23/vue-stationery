@@ -96,7 +96,7 @@ provide('isLoadingItems', isLoading)
   <div class="bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14">
     <Header />
 
-    <Carousel v-if="!isLOading" />
+    <Carousel v-if="!isLoading" />
     <BannerSkeleton v-else />
 
     <div class="p-10">

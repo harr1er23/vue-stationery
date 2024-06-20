@@ -1,7 +1,7 @@
 <script setup>
-defineProps({
-  onChangeSelect: Function
-})
+import { inject } from 'vue'
+
+const onChangeSelect = inject('onChangeSelect')
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 <script setup>
-defineProps({
-  onChangeSearchInput: Function
-})
+import { inject } from 'vue'
+
+const onChangeSearchInput = inject('onChangeSearchInput')
 </script>
 
 <template>

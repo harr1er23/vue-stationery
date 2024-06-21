@@ -2,6 +2,10 @@
 import { defineComponent } from 'vue'
 import { ContentLoader } from 'vue-content-loader'
 
+defineProps({
+  count: Number
+})
+
 defineComponent({
   components: { ContentLoader }
 })
@@ -10,7 +14,7 @@ defineComponent({
 <template>
   <div class="flex flex-wrap justify-center">
     <content-loader
-      v-for="skeleton in 12"
+      v-for="skeleton in count"
       :key="skeleton"
       class="w-72 m-2"
       viewBox="0 0 300 400"

@@ -5,14 +5,14 @@ defineProps({
   name: String,
   price: Number,
   isFavorite: Boolean,
-  isAdded: Boolean,
+  isAddedToCart: Boolean,
   favoriteId: Number,
-  onClickFavorite: Function
+  onClickFavorite: Function,
+  onClickAddToCart: Function,
+  minusProductCount: Function,
+  plusProductCount: Function,
+  cartCount: Number
 })
-
-const onClickAdd = () => {
-  alert('Add to cart')
-}
 </script>
 
 <template>
@@ -35,7 +35,19 @@ const onClickAdd = () => {
         <b>{{ price }} руб.</b>
       </div>
 
-      <img @click="onClickAdd" :src="!isAdded ? '/plus.svg' : '/checked.svg'" alt="Plus" />
+      <img v-if="cartCount === 0" @click="onClickAddToCart" src="/plus.svg" alt="Plus" />
+
+      <div class="flex rounded-xl items-center p-2 bg-slate-100" v-else>
+        <div @click="minusProductCount">
+          <img class="w-6 cursor-pointer" src="/minus.svg" alt="Minus" />
+        </div>
+
+        <span class="mx-2">{{ cartCount }}</span>
+
+        <div @click="plusProductCount">
+          <img class="w-6 cursor-pointer" src="/plus.svg" alt="Plus" />
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -6,8 +6,8 @@ import 'vue3-carousel/dist/carousel.css'
 
 const bannersPhoto = [
   'https://mekka.spb.ru/upload/resize_cache/iblock/7e5/hd0j7yzjcfuvlolpwyea24zdhnrt141h/867_385_1/image_04_12_23_04_10.jpeg',
-  'https://irkformat.ru/upload/iblock/ed9/6bhkcrgts387vnm7ci4j3fll41uo3ugv.png',
-  'https://mekka.spb.ru/upload/resize_cache/iblock/37d/ktacjdtqvmddldk1hx8275qto77m9s9i/867_385_1/Tvorchestvo-_kraski_.JPG'
+  'https://mekka.spb.ru/upload/resize_cache/iblock/37d/ktacjdtqvmddldk1hx8275qto77m9s9i/867_385_1/Tvorchestvo-_kraski_.JPG',
+  'https://mekka.spb.ru/upload/resize_cache/iblock/d47/867_385_1/Raskraska_antistress.jpg'
 ]
 
 defineComponent({
@@ -21,9 +21,9 @@ defineComponent({
 </script>
 
 <template>
-  <Carousel class="my-10" :autoplay="6000" :wrap-around="true">
+  <Carousel :autoplay="6000" :wrap-around="true">
     <Slide v-for="bannerPhoto in bannersPhoto" :key="bannerPhoto">
-      <img :src="bannerPhoto" alt="Banner" />
+      <img class="rounded-3xl" :src="bannerPhoto" alt="Banner" />
     </Slide>
 
     <template #addons>

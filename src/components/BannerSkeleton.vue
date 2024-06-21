@@ -8,7 +8,7 @@ defineComponent({
 </script>
 
 <template>
-  <div class="flex px-24 py-24 justify-center">
+  <div class="flex px-24 justify-center">
     <content-loader
       viewBox="0 0 1000 400"
       :speed="2"

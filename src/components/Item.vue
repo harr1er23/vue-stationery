@@ -35,7 +35,12 @@ defineProps({
         <b>{{ price }} руб.</b>
       </div>
 
-      <img v-if="cartCount === 0" @click="onClickAddToCart" src="/plus.svg" alt="Plus" />
+      <img
+        v-if="!isAddedToCart && cartCount === 0"
+        @click="onClickAddToCart"
+        src="/plus.svg"
+        alt="Plus"
+      />
 
       <div class="flex rounded-xl items-center p-2 bg-slate-100" v-else>
         <div @click="minusProductCount">

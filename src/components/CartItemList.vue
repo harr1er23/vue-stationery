@@ -1,15 +1,28 @@
 <script setup>
-import { inject, watch } from 'vue'
+import { inject } from 'vue'
+import { VueSpinner } from 'vue3-spinners'
+
 import CartItem from './CartItem.vue'
+import ClearDraw from './ClearDraw.vue'
 
-const items = inject('items')
-
-watch(items)
+const { cartItems, cartButtonDisabled } = inject('cart')
 </script>
 
 <template>
-  <div class="container flex h-4/6 overflow-y-scroll flex-1 flex-col gap-4 justify-between">
-    <CartItem v-for="item in items" :key="item.id" v-bind="item" />
+  <div class="container flex h-4/6 overflow-y-scroll flex flex-1 flex-col gap-4">
+    <VueSpinner
+      v-if="cartButtonDisabled && cartItems.length !== 0"
+      class="self-center my-auto"
+      size="30"
+      color="green"
+    />
+    <ClearDraw v-if="cartItems.length === 0 && cartButtonDisabled" />
+    <CartItem
+      v-else-if="!cartButtonDisabled && cartItems.length !== 0"
+      v-for="item in cartItems"
+      :key="item.id"
+      v-bind="item"
+    />
   </div>
 </template>
 

@@ -1,16 +1,12 @@
 <script setup>
 import { inject } from 'vue'
 
-const showDrawer = inject('showDrawer')
-
-const onClickCloseDrawer = () => {
-  showDrawer.value = false
-}
+const { closeDrawer } = inject('cart')
 </script>
 
 <template>
   <div class="flex items-center gap-5 mb-8">
-    <div @click="onClickCloseDrawer">
+    <div @click="closeDrawer">
       <svg
         class="opacity-30 cursor-pointer rotate-180 transition hover:-translate-x-1 hover:opacity-100"
         width="16"

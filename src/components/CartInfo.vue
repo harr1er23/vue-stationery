@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 
-const cartSum = inject('cartSum')
+const { cartSum, cartButtonDisabled, createOrder } = inject('cart')
 </script>
 
 <template>
@@ -19,7 +19,8 @@ const cartSum = inject('cartSum')
     </div>
 
     <button
-      disabled="true"
+      @click="createOrder"
+      :disabled="cartButtonDisabled"
       class="mt-4 transition bg-lime-500 w-full rounded-xl py-3 text-white hover:bg-lime-600 active:bg-lime-700 disabled:bg-slate-300 cursor-pointer"
     >
       Оформить заказ

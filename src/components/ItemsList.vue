@@ -2,10 +2,13 @@
 import axios from 'axios'
 
 import Item from './Item.vue'
+import { inject } from 'vue'
 
 defineProps({
   items: Array
 })
+
+const { cartItems, reduceCartArrayAmount } = inject('cart')
 
 const onClickFavorite = (item) => {
   if (!item.isFavorite) {
@@ -16,7 +19,7 @@ const onClickFavorite = (item) => {
   item.isFavorite = !item.isFavorite
 }
 
-const onClickAddToCart = async (item) => {
+const addToCart = async (item) => {
   try {
     const { data } = await axios.post('https://6a17866731ff6fbf.mokky.dev/cart', {
       itemId: item.id,
@@ -26,32 +29,19 @@ const onClickAddToCart = async (item) => {
       price: item.price
     })
 
-    item.cartId = data.id
-    item.cartCount = item.cartCount + 1
+    cartItems.value.push({
+      id: data.id,
+      itemId: item.id,
+      cartCount: 1,
+      url: item.mainPhoto,
+      name: item.name,
+      price: item.price
+    })
+    item.isAddedToCart = true
+    item.cartCount = 1
+    item.cartItemId = data.id
   } catch (err) {
     console.log(err)
-  }
-}
-
-const onClickMinus = (item) => {
-  console.log(item.cartCount)
-  if (item.cartCount - 1 > 0) {
-    axios.patch(`https://6a17866731ff6fbf.mokky.dev/cart/${item.cartId}`, {
-      cartCount: item.cartCount - 1
-    })
-  } else {
-    axios.delete(`https://6a17866731ff6fbf.mokky.dev/cart/${item.cartId}`)
-  }
-  item.cartCount = item.cartCount - 1
-}
-
-const onClickPlus = (item) => {
-  if (item.cartCount < 30) {
-    axios.patch(`https://6a17866731ff6fbf.mokky.dev/cart/${item.cartId}`, {
-      cartCount: item.cartCount + 1
-    })
-
-    item.cartCount = item.cartCount + 1
   }
 }
 
@@ -74,6 +64,42 @@ const deleteFromFavorite = async (item) => {
     console.log(err)
   }
 }
+
+const onClickMinus = (item) => {
+  if (item.cartCount - 1 > 0) {
+    axios.patch(`https://6a17866731ff6fbf.mokky.dev/cart/${item.cartItemId}`, {
+      cartCount: item.cartCount - 1
+    })
+
+    reduceCartArrayAmount(item.cartItemId)
+  } else {
+    axios.delete(`https://6a17866731ff6fbf.mokky.dev/cart/${item.cartItemId}`)
+    item.isAddedToCart = false
+
+    cartItems.value = cartItems.value.filter((cartItem) => cartItem.id !== item.cartItemId)
+  }
+  item.cartCount = item.cartCount - 1
+}
+
+const onClickPlus = (item) => {
+  if (item.cartCount < 30) {
+    axios.patch(`https://6a17866731ff6fbf.mokky.dev/cart/${item.cartItemId}`, {
+      cartCount: item.cartCount + 1
+    })
+
+    item.cartCount = item.cartCount + 1
+    cartItems.value = cartItems.value.map((obj) => {
+      if (obj.id === item.cartItemId) {
+        return {
+          ...obj,
+          cartCount: obj.cartCount + 1
+        }
+      }
+
+      return obj
+    })
+  }
+}
 </script>
 
 <template>
@@ -81,7 +107,7 @@ const deleteFromFavorite = async (item) => {
     <Item
       v-for="item in items"
       :onClickFavorite="() => onClickFavorite(item)"
-      :onClickAddToCart="() => onClickAddToCart(item)"
+      :onClickAddToCart="() => addToCart(item)"
       :minusProductCount="() => onClickMinus(item)"
       :plusProductCount="() => onClickPlus(item)"
       :key="item.id"

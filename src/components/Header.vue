@@ -1,12 +1,9 @@
 <script setup>
-import { inject } from 'vue'
+defineProps({
+  cartSum: Number
+})
 
-const cartSum = inject('cartSum')
-const showDrawer = inject('showDrawer')
-
-const onClickShowDrawer = () => {
-  showDrawer.value = true
-}
+const emit = defineEmits(['openDrawer'])
 </script>
 
 <template>
@@ -31,11 +28,11 @@ const onClickShowDrawer = () => {
       </li>
 
       <li
-        @click="onClickShowDrawer"
+        @click="() => emit('openDrawer')"
         class="flex items-center gap-3 cursor-pointer text-gray-500 hover:text-black"
       >
         <img src="/cart.svg" alt="Cart" />
-        <b>{{ cartSum }} р.</b>
+        <b> {{ cartSum }} р.</b>
       </li>
     </ul>
   </header>

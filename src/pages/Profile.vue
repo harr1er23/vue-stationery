@@ -10,7 +10,7 @@ const ordersList = ref([])
 const isLoading = ref(false)
 
 const fetchOrders = async () => {
-  const { data } = await axios.get(`https://6a17866731ff6fbf.mokky.dev/orders`)
+  const { data } = await axios.get(`https://6a17866731ff6fbf.mokky.dev/orders?sortBy=-id`)
 
   ordersList.value = data
 }

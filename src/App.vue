@@ -155,10 +155,18 @@ const deleteItemFromCart = async (id) => {
 
 const createOrder = async () => {
   try {
+    const currentDate = new Date().toLocaleDateString('ru-RU')
+    const uid = Math.floor(Date.now() / 1000)
+      .toString()
+      .slice(-6)
+
     isCreatingOrder.value = true
     const { data } = await axios.post(`https://6a17866731ff6fbf.mokky.dev/orders`, {
       items: cartItems.value,
-      totalPrice: cartSum.value
+      totalPrice: cartSum.value,
+      uid,
+      date: currentDate,
+      status: 'wait'
     })
 
     for (const obj of cartItems.value) {

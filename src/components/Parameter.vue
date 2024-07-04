@@ -9,6 +9,7 @@ defineProps({
 })
 
 const category = inject('category')
+// const categoryUrl = inject('categoryUrl')
 
 const updateCategory = (name) => {
   category.value = name
@@ -19,6 +20,12 @@ const showItems = ref(false)
 const onClickShowList = () => {
   showItems.value = !showItems.value
 }
+
+// const categoryProp = props.sections.find((section) => section.url === categoryUrl)
+
+// if (categoryProp) {
+//   category.value = categoryProp.name
+// }
 </script>
 
 <template>

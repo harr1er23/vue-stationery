@@ -17,7 +17,7 @@ defineProps({
 
 <template>
   <div
-    class="flex my-4 mr-2 flex-col relative border border-slate-100 w-64 rounded-3xl cursor-pointer p-8 hover:-translate-y-2 hover:shadow-xl transition bg-white"
+    class="flex my-4 mr-2 flex-col relative border border-slate-100 w-72 rounded-3xl cursor-pointer p-8 hover:-translate-y-2 hover:shadow-xl transition bg-white"
   >
     <img
       @click="onClickFavorite"
@@ -25,7 +25,7 @@ defineProps({
       alt="Like 1"
       class="absolute top-8 left-8"
     />
-    <img :src="mainPhoto" alt="Item" class="w-60 self-center" />
+    <img :src="mainPhoto" alt="Item" class="w-54 self-center" />
 
     <p class="mt-2">{{ name }}</p>
 

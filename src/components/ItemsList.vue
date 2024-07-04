@@ -103,7 +103,7 @@ const onClickPlus = (item) => {
 </script>
 
 <template>
-  <div class="grid grid-cols-4 gap-4 mx-10" v-auto-animate>
+  <div class="grid grid-cols-4" v-auto-animate>
     <Item
       v-for="item in items"
       :onClickFavorite="() => onClickFavorite(item)"

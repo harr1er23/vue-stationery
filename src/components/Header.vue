@@ -2,6 +2,7 @@
 import { inject } from 'vue'
 
 const { totalPrice } = inject('cart')
+const category = inject('category')
 
 const emit = defineEmits(['openDrawer'])
 </script>
@@ -9,7 +10,7 @@ const emit = defineEmits(['openDrawer'])
 <template>
   <header class="flex justify-between z-10 fixed bg-white rounded-xl shadow-lg px-10 py-6">
     <router-link to="/">
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-4" @click="() => (category = 'Все товары')">
         <img src="/logo.png" alt="Logo" class="w-10" />
         <div>
           <h2 class="text-xl font-bold uppercase">Vue Stationery</h2>

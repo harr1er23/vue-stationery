@@ -11,26 +11,23 @@ import StoksList from '../components/StoksList.vue'
 import ParametersList from '../components/ParametersList.vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
-// import Pagination from './components/Pagination.vue'
+import Pagination from '../components/Pagination.vue'
 
 const stoks = inject('stoks')
-const items = inject('items')
+const { items, totalItems, totalPages } = inject('items')
 const isLoading = inject('isLoadingItems')
-const pageUrl = inject('pageUrl')
 const category = inject('category')
 const { cartItems } = inject('cart')
 const filters = inject('filters')
-
-console.log(pageUrl)
 
 const route = useRoute()
 
 const fetchItems = async (categoryId) => {
   try {
     const params = {
-      sortBy: filters.sortBy
-      // page: filters.page,
-      // limit: filters.limit
+      sortBy: filters.sortBy,
+      page: filters.page,
+      limit: filters.limit
     }
 
     const url = categoryId
@@ -41,9 +38,11 @@ const fetchItems = async (categoryId) => {
       params.name = `*${filters.searchQuery}*`
     }
 
-    const { data } = await axios.get(url)
+    const { data } = await axios.get(url, {
+      params
+    })
 
-    items.value = data.map((obj) => ({
+    items.value = data.items.map((obj) => ({
       ...obj,
       isFavorite: false,
       isAddedToCart: false,
@@ -52,8 +51,8 @@ const fetchItems = async (categoryId) => {
       cartItemId: null
     }))
 
-    // totalItems.value = data
-    // totalItems.value = data.meta.total_items
+    totalPages.value = data.meta.total_pages
+    totalItems.value = data.meta.total_items
   } catch (err) {
     console.log(err)
   }
@@ -131,12 +130,13 @@ watch(
       <ItemsList v-if="!isLoading" :items="items" />
       <ItemsSkeleton v-else :count="4" />
 
-      <!--<Pagination
-      class="self-center mt-4"
-      :totalIitems="totalItems"
-      :currentPage="filters.page"
-      :limit="filters.limit"
-    />-->
+      <Pagination
+        v-if="totalPages > 1"
+        class="self-center mt-4"
+        :totalIitems="totalItems"
+        :currentPage="filters.page"
+        :limit="filters.limit"
+      />
     </div>
   </main>
 </template>

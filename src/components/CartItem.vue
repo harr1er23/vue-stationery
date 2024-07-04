@@ -6,7 +6,7 @@ const isLoadingItems = inject('isLoadingItems')
 
 const { deleteItemFromCart, cartItems, reduceCartArrayAmount, reduceItemArrayAmount } =
   inject('cart')
-const items = inject('items')
+const { items } = inject('items')
 
 const props = defineProps({
   cartCount: Number,

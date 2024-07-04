@@ -29,9 +29,15 @@ const filters = reactive({
   limit: 16
 })
 
+const cartDiscount = computed(() =>
+  cartItems.value.reduce((sum, item) => sum + item.price * item.cartCount * 0.05, 0)
+)
+
 const cartSum = computed(() =>
   cartItems.value.reduce((sum, item) => sum + item.price * item.cartCount, 0)
 )
+
+const totalPrice = computed(() => (cartSum.value + cartDiscount.value).toFixed(0))
 
 const cartIsEmpty = computed(() => cartItems.value.length === 0)
 
@@ -232,7 +238,9 @@ provide('cart', {
   createOrder,
   cartButtonDisabled,
   reduceCartArrayAmount,
-  reduceItemArrayAmount
+  reduceItemArrayAmount,
+  cartDiscount,
+  totalPrice
 })
 
 provide('category', category)

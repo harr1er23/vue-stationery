@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 
-const { cartSum } = inject('cart')
+const { totalPrice } = inject('cart')
 
 const emit = defineEmits(['openDrawer'])
 </script>
@@ -38,7 +38,7 @@ const emit = defineEmits(['openDrawer'])
         class="flex items-center gap-3 cursor-pointer text-gray-500 hover:text-black"
       >
         <img src="/cart.svg" alt="Cart" />
-        <b> {{ cartSum }} р.</b>
+        <b> {{ totalPrice }} р.</b>
       </li>
     </ul>
   </header>

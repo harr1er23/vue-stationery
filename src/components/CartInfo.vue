@@ -1,21 +1,27 @@
 <script setup>
 import { inject } from 'vue'
 
-const { cartSum, cartButtonDisabled, createOrder } = inject('cart')
+const { totalPrice, cartSum, cartDiscount, cartButtonDisabled, createOrder } = inject('cart')
 </script>
 
 <template>
   <div class="flex absolute w-96 bottom-10 left-o flex-col gap-4 mt-7">
     <div class="flex gap-2">
-      <span>Итого:</span>
+      <span>Сумма:</span>
       <div class="flex-1 border-b border-dashed"></div>
-      <b>{{ cartSum }} ₽</b>
+      <b> {{ cartSum }} ₽</b>
     </div>
 
     <div class="flex gap-2">
-      <span>Налог 5%</span>
+      <span>Скидка: 5%</span>
       <div class="flex-1 border-b border-dashed"></div>
-      <b>900 ₽</b>
+      <b> {{ cartDiscount.toFixed(0) }} ₽</b>
+    </div>
+
+    <div class="flex gap-2">
+      <span>Итого:</span>
+      <div class="flex-1 border-b border-dashed"></div>
+      <b>{{ totalPrice }} ₽</b>
     </div>
 
     <button

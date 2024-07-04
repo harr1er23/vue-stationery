@@ -9,7 +9,7 @@ const { cartItems, cartButtonDisabled } = inject('cart')
 </script>
 
 <template>
-  <div class="container flex h-4/6 overflow-y-scroll flex flex-1 flex-col gap-4">
+  <div class="container flex h-4/6 overflow-y-scroll flex flex-1 flex-col gap-4" v-auto-animate>
     <VueSpinner
       v-if="cartButtonDisabled && cartItems.length !== 0"
       class="self-center my-auto"

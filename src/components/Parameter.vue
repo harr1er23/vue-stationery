@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 
 defineProps({
   id: Number,
@@ -7,6 +7,12 @@ defineProps({
   url: String,
   sections: Array
 })
+
+const category = inject('category')
+
+const updateCategory = (name) => {
+  category.value = name
+}
 
 const showItems = ref(false)
 
@@ -27,10 +33,17 @@ const onClickShowList = () => {
       <div class="font-medium text-slate-500">{{ name }}</div>
     </div>
 
-    <div class="ml-14" v-for="section in sections" :key="section.type">
-      <div class="my-2 cursor-pointer text-slate-500 hover:text-black" v-if="showItems">
-        {{ section.name }}
-      </div>
+    <div
+      class="ml-14"
+      v-for="section in sections"
+      :key="section.id"
+      @click="updateCategory(section.name)"
+    >
+      <router-link :to="{ name: 'Category', params: { id: section.url } }">
+        <div class="my-2 cursor-pointer text-slate-500 hover:text-black" v-if="showItems">
+          {{ section.name }}
+        </div>
+      </router-link>
     </div>
   </div>
 </template>

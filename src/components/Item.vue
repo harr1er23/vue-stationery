@@ -17,7 +17,7 @@ defineProps({
 
 <template>
   <div
-    class="flex flex-col relative border border-slate-100 rounded-3xl cursor-pointer p-8 hover:-translate-y-2 hover:shadow-xl transition bg-white"
+    class="flex my-4 mr-2 flex-col relative border border-slate-100 w-64 rounded-3xl cursor-pointer p-8 hover:-translate-y-2 hover:shadow-xl transition bg-white"
   >
     <img
       @click="onClickFavorite"

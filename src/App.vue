@@ -3,19 +3,14 @@ import { onMounted, ref, watch, reactive, provide, computed } from 'vue'
 import axios from 'axios'
 
 import Header from './components/Header.vue'
-import ItemsList from './components/ItemsList.vue'
-// import Carousel from './components/Carousel.vue'
-import ItemsSkeleton from './components/ItemsSkeleton.vue'
-import Search from './components/Search.vue'
-import SelectFilter from './components/SelectFilter.vue'
-// import BannerSkeleton from './components/BannerSkeleton.vue'
-import StoksList from './components/StoksList.vue'
-import ParametersList from './components/ParametersList.vue'
 import Drawer from './components/Drawer.vue'
-// import Pagination from './components/Pagination.vue'
+
+const pageUrl = window.location.href.split('/')[3]
 
 const items = ref([])
 const cartItems = ref([])
+
+const category = ref('Все товары')
 
 const stoks = ref([])
 const parameters = ref([])
@@ -237,6 +232,7 @@ onMounted(async () => {
   isLoading.value = false
 })
 
+// watch(pageUrl, fetchItems)
 watch(filters, fetchItems)
 watch(cartItems, () => {
   items.value = items.value.map((item) => ({
@@ -245,10 +241,13 @@ watch(cartItems, () => {
   }))
 })
 
+provide('parameters', parameters)
+provide('stoks', stoks)
 provide('items', items)
 provide('onChangeSelect', onChangeSelect)
 provide('onChangeSearchInput', onChangeSearchInput)
 provide('isLoadingItems', isLoading)
+provide('pageUrl', pageUrl)
 provide('cart', {
   cartItems,
   closeDrawer,
@@ -260,6 +259,8 @@ provide('cart', {
   reduceCartArrayAmount,
   reduceItemArrayAmount
 })
+
+provide('category', category)
 </script>
 
 <template>
@@ -268,56 +269,9 @@ provide('cart', {
     <Header @open-drawer="openDrawer" :cart-sum="cartSum" />
 
     <div class="flex">
-      <ParametersList :parameters="parameters" />
-
-      <main class="content fixed rounded-xl shadow-xl p-8 mt-28 bg-white overflow-hidden">
-        <div class="flex flex-col scroll-container overflow-y-auto h-full">
-          <!-- <Carousel v-if="!isLoading" /> -->
-          <!-- <BannerSkeleton v-else /> -->
-
-          <div class="pt-6 pl-10">
-            <div class="flex justify-between items-center">
-              <h2 class="text-3xl font-bold mb-8">Акции</h2>
-            </div>
-          </div>
-
-          <StoksList v-if="!isLoading" :stoks="stoks" />
-          <ItemsSkeleton v-else :count="4" />
-
-          <div class="p-10">
-            <div class="flex justify-between items-center">
-              <h2 class="text-3xl font-bold mb-8">Все товары</h2>
-
-              <div class="flex gap-4">
-                <SelectFilter />
-                <Search />
-              </div>
-            </div>
-          </div>
-
-          <ItemsList v-if="!isLoading" :items="items" />
-          <ItemsSkeleton v-else :count="4" />
-
-          <!--<Pagination
-            class="self-center mt-4"
-            :totalIitems="totalItems"
-            :currentPage="filters.page"
-            :limit="filters.limit"
-          />-->
-        </div>
-      </main>
+      <router-view></router-view>
     </div>
   </div>
 </template>
 
-<style scoped>
-.content {
-  width: 75%;
-  margin-left: 270px;
-}
-
-.scroll-container {
-  height: calc(100vh - 170px); /* Adjust this value to account for header height */
-  overflow-y: auto;
-}
-</style>
+<style scoped></style>

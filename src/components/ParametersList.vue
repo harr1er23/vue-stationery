@@ -1,9 +1,8 @@
 <script setup>
+import { inject } from 'vue'
 import Parameter from './Parameter.vue'
 
-defineProps({
-  parameters: Array
-})
+const parameters = inject('parameters')
 </script>
 
 <template>

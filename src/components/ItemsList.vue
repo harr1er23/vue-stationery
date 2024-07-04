@@ -24,7 +24,7 @@ const addToCart = async (item) => {
     const { data } = await axios.post('https://6a17866731ff6fbf.mokky.dev/cart', {
       itemId: item.id,
       cartCount: 1,
-      url: item.mainPhoto,
+      mainPhoto: item.mainPhoto,
       name: item.name,
       price: item.price
     })
@@ -33,7 +33,7 @@ const addToCart = async (item) => {
       id: data.id,
       itemId: item.id,
       cartCount: 1,
-      url: item.mainPhoto,
+      mainPhoto: item.mainPhoto,
       name: item.name,
       price: item.price
     })

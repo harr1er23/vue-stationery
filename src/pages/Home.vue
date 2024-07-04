@@ -18,23 +18,76 @@ const items = inject('items')
 const isLoading = inject('isLoadingItems')
 const pageUrl = inject('pageUrl')
 const category = inject('category')
+const { cartItems } = inject('cart')
+const filters = inject('filters')
 
 console.log(pageUrl)
 
 const route = useRoute()
 
 const fetchItems = async (categoryId) => {
-  const url = categoryId
-    ? `https://6a17866731ff6fbf.mokky.dev/products/?type=${categoryId}`
-    : 'https://6a17866731ff6fbf.mokky.dev/products'
+  try {
+    const params = {
+      sortBy: filters.sortBy
+      // page: filters.page,
+      // limit: filters.limit
+    }
 
-  const { data } = await axios.get(url)
-  items.value = data
+    const url = categoryId
+      ? `https://6a17866731ff6fbf.mokky.dev/products/?type=${categoryId}`
+      : 'https://6a17866731ff6fbf.mokky.dev/products'
+
+    if (filters.searchQuery) {
+      params.name = `*${filters.searchQuery}*`
+    }
+
+    const { data } = await axios.get(url)
+
+    items.value = data.map((obj) => ({
+      ...obj,
+      isFavorite: false,
+      isAddedToCart: false,
+      favoriteId: null,
+      cartCount: 0,
+      cartItemId: null
+    }))
+
+    // totalItems.value = data
+    // totalItems.value = data.meta.total_items
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const fetchCartItems = async () => {
+  try {
+    const { data } = await axios.get('https://6a17866731ff6fbf.mokky.dev/cart')
+
+    items.value = items.value.map((item) => {
+      const inCart = data.find((favorite) => favorite.itemId === item.id)
+
+      if (!inCart) {
+        return item
+      }
+
+      return {
+        ...item,
+        cartCount: inCart.cartCount,
+        isAddedToCart: true,
+        cartItemId: inCart.id
+      }
+    })
+
+    cartItems.value = data
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 onMounted(async () => {
   isLoading.value = true
   await fetchItems(route.params.id)
+  await fetchCartItems()
   isLoading.value = false
 })
 

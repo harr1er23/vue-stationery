@@ -119,31 +119,6 @@ const fetchParameters = async () => {
   }
 }
 
-const fetchCartItems = async () => {
-  try {
-    const { data } = await axios.get('https://6a17866731ff6fbf.mokky.dev/cart')
-
-    items.value = items.value.map((item) => {
-      const inCart = data.find((favorite) => favorite.itemId === item.id)
-
-      if (!inCart) {
-        return item
-      }
-
-      return {
-        ...item,
-        cartCount: inCart.cartCount,
-        isAddedToCart: true,
-        cartItemId: inCart.id
-      }
-    })
-
-    cartItems.value = data
-  } catch (err) {
-    console.log(err)
-  }
-}
-
 const openDrawer = () => {
   showDrawer.value = true
 }
@@ -228,7 +203,6 @@ onMounted(async () => {
   await fetchFavoriteItems()
   await fetchStoks()
   await fetchParameters()
-  await fetchCartItems()
   isLoading.value = false
 })
 
@@ -241,6 +215,7 @@ watch(cartItems, () => {
   }))
 })
 
+provide('filters', filters)
 provide('parameters', parameters)
 provide('stoks', stoks)
 provide('items', items)

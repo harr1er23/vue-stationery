@@ -12,7 +12,7 @@ const props = defineProps({
   cartCount: Number,
   id: Number,
   itemId: Number,
-  url: String,
+  mainPhoto: String,
   name: String,
   price: Number
 })
@@ -80,7 +80,7 @@ const onClickPlus = () => {
     v-if="!isLoadingItems"
     class="flex border items-center border-slate-100 p-4 rounded-xl gap-4"
   >
-    <img class="w-16 h-16" :src="url" alt="Item" />
+    <img class="w-16 h-16" :src="mainPhoto" alt="Item" />
 
     <div class="flex flex-col justify-between w-2/5">
       <p>{{ name }}</p>

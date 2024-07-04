@@ -5,6 +5,7 @@
       v-model="currentPage"
       :items-per-page="limit"
       :max-pages-shown="2"
+      @click="onClickHandler"
     >
       <template #prev-button>
         <span class="justify-self-center self-center">
@@ -38,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref, toRefs, watchEffect } from 'vue'
+import { inject, ref, toRefs, watchEffect } from 'vue'
 
 const props = defineProps({
   totalIitems: Number,
@@ -46,12 +47,18 @@ const props = defineProps({
   limit: Number
 })
 
+const filters = inject('filters')
+
 const { totalIitems, limit } = toRefs(props)
 const currentPage = ref(props.currentPage)
 
 watchEffect(() => {
   currentPage.value = props.currentPage
 })
+
+const onClickHandler = (page) => {
+  filters.page = page
+}
 </script>
 
 <style>

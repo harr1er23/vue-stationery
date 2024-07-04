@@ -15,7 +15,8 @@ const category = ref('Все товары')
 const stoks = ref([])
 const parameters = ref([])
 
-const totalItems = ref(null)
+const totalItems = ref(0)
+const totalPages = ref(0)
 const showDrawer = ref(false)
 
 const isLoading = ref(true)
@@ -54,9 +55,9 @@ const onChangeSearchInput = (event) => {
 const fetchItems = async () => {
   try {
     const params = {
-      sortBy: filters.sortBy
-      // page: filters.page,
-      // limit: filters.limit
+      sortBy: filters.sortBy,
+      page: filters.page,
+      limit: filters.limit
     }
 
     if (filters.searchQuery) {
@@ -67,7 +68,7 @@ const fetchItems = async () => {
       params
     })
 
-    items.value = data.map((obj) => ({
+    items.value = data.items.map((obj) => ({
       ...obj,
       isFavorite: false,
       isAddedToCart: false,
@@ -76,8 +77,8 @@ const fetchItems = async () => {
       cartItemId: null
     }))
 
-    totalItems.value = data
-    // totalItems.value = data.meta.total_items
+    totalItems.value = data.meta.total_items
+    totalPages.value = data.meta.total_pages
   } catch (err) {
     console.log(err)
   }
@@ -154,10 +155,18 @@ const deleteItemFromCart = async (id) => {
 
 const createOrder = async () => {
   try {
+    const currentDate = new Date().toLocaleDateString('ru-RU')
+    const uid = Math.floor(Date.now() / 1000)
+      .toString()
+      .slice(-6)
+
     isCreatingOrder.value = true
     const { data } = await axios.post(`https://6a17866731ff6fbf.mokky.dev/orders`, {
       items: cartItems.value,
-      totalPrice: cartSum.value
+      totalPrice: cartSum.value,
+      uid,
+      date: currentDate,
+      status: 'wait'
     })
 
     for (const obj of cartItems.value) {
@@ -212,7 +221,6 @@ onMounted(async () => {
   isLoading.value = false
 })
 
-// watch(pageUrl, fetchItems)
 watch(filters, fetchItems)
 watch(cartItems, () => {
   items.value = items.value.map((item) => ({
@@ -224,7 +232,11 @@ watch(cartItems, () => {
 provide('filters', filters)
 provide('parameters', parameters)
 provide('stoks', stoks)
-provide('items', items)
+provide('items', {
+  items,
+  totalItems,
+  totalPages
+})
 provide('onChangeSelect', onChangeSelect)
 provide('onChangeSearchInput', onChangeSearchInput)
 provide('isLoadingItems', isLoading)

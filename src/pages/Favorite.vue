@@ -1,47 +1,27 @@
 <script setup>
-import axios from 'axios'
-import { inject, onMounted, ref } from 'vue'
-
 import ItemsSkeleton from '../components/ItemsSkeleton.vue'
-import ItemsList from '../components/ItemsList.vue'
+import FavoriteList from '../components/FavoriteList.vue'
+import { inject } from 'vue'
 
-const favorites = ref([])
-
-const isLoading = ref(false)
-
-const fetchOrders = async () => {
-  const { data } = await axios.get(`https://6a17866731ff6fbf.mokky.dev/favorite`)
-
-  favorites.value = data
-}
-
-const { isAuth } = inject('userInfo')
-
-onMounted(async () => {
-  if (isAuth) {
-    isLoading.value = true
-    await fetchOrders()
-    isLoading.value = false
-  }
-})
+const isLoading = inject('isLoadingItems')
 </script>
 
 <template>
-  <main v-if="isAuth" class="content fixed rounded-xl shadow-xl p-8 mt-28 bg-white overflow-hidden">
+  <main class="content rounded-xl shadow-xl p-4 mt-28 bg-white overflow-hidden">
     <div class="flex flex-col scroll-container overflow-y-auto h-full">
-      <ItemsList v-if="!isLoading" :items="favorites" />
-      <ItemsSkeleton v-else :count="4" />
+      <FavoriteList v-if="!isLoading" :items="items" />
+      <ItemsSkeleton v-else :count="12" />
     </div>
   </main>
 </template>
 
 <style scoped>
 .content {
-  width: 90%;
+  width: 100%;
 }
 
 .scroll-container {
-  height: calc(100vh - 170px); /* Adjust this value to account for header height */
+  height: calc(100vh - 170px);
   overflow-y: auto;
 }
 </style>

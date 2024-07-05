@@ -23,9 +23,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="content fixed rounded-xl shadow-xl p-8 mt-28 bg-white overflow-hidden">
+  <main class="rounded-xl shadow-xl p-4 mt-28 bg-white overflow-hidden">
     <div class="flex flex-col scroll-container overflow-y-auto h-full">
-      <ItemsSkeleton v-if="isLoading" :count="4" />
+      <ItemsSkeleton v-if="isLoading" :count="6" />
       <OrdersList v-else :ordersList="ordersList" />
     </div>
   </main>
@@ -33,11 +33,11 @@ onMounted(async () => {
 
 <style scoped>
 .content {
-  width: 90%;
+  width: 100%;
 }
 
 .scroll-container {
-  height: calc(100vh - 170px); /* Adjust this value to account for header height */
+  height: calc(100vh - 170px);
   overflow-y: auto;
 }
 </style>

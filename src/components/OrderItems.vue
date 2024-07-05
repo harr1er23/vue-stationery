@@ -7,7 +7,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex flex-wrap">
+  <div class="grid grid-cols-6">
     <OrderItem v-for="orderItem in orderItems" :key="orderItem.id" v-bind="orderItem" />
   </div>
 </template>

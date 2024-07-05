@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import { inject, onMounted, ref } from 'vue'
 
 import ItemsSkeleton from '../components/ItemsSkeleton.vue'
 import ItemsList from '../components/ItemsList.vue'
@@ -15,15 +15,19 @@ const fetchOrders = async () => {
   favorites.value = data
 }
 
+const { isAuth } = inject('userInfo')
+
 onMounted(async () => {
-  isLoading.value = true
-  await fetchOrders()
-  isLoading.value = false
+  if (isAuth) {
+    isLoading.value = true
+    await fetchOrders()
+    isLoading.value = false
+  }
 })
 </script>
 
 <template>
-  <main class="content fixed rounded-xl shadow-xl p-8 mt-28 bg-white overflow-hidden">
+  <main v-if="isAuth" class="content fixed rounded-xl shadow-xl p-8 mt-28 bg-white overflow-hidden">
     <div class="flex flex-col scroll-container overflow-y-auto h-full">
       <ItemsList v-if="!isLoading" :items="favorites" />
       <ItemsSkeleton v-else :count="4" />

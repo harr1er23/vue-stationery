@@ -9,6 +9,7 @@ defineProps({
 })
 
 const category = inject('category')
+// const categoryUrl = inject('categoryUrl')
 
 const updateCategory = (name) => {
   category.value = name
@@ -19,6 +20,12 @@ const showItems = ref(false)
 const onClickShowList = () => {
   showItems.value = !showItems.value
 }
+
+// const categoryProp = props.sections.find((section) => section.url === categoryUrl)
+
+// if (categoryProp) {
+//   category.value = categoryProp.name
+// }
 </script>
 
 <template>
@@ -28,9 +35,9 @@ const onClickShowList = () => {
         class="parameter-photo-bg flex justify-center p-2 items-center bg-slate-100 rounded-xl mr-4"
       >
         <img v-if="showItems === true" class="arrow w-6 h-6" src="/arrow-up.png" />
-        <img v-else class="parameter-photo w-6 h-6" :src="url" alt="" />
+        <img v-else class="parameter-photo w-6 h-6 mix-blend-multiply" :src="url" alt="" />
       </div>
-      <div class="font-medium text-slate-500">{{ name }}</div>
+      <div class="font-medium text-slate-500 text-sm">{{ name }}</div>
     </div>
 
     <div

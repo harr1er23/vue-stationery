@@ -1,36 +1,37 @@
 <script setup>
 import { inject } from 'vue'
+
 import Parameter from './Parameter.vue'
+import ParameterSkeleton from './ParameterSkeleton.vue'
 
 const parameters = inject('parameters')
+const isLoading = inject('isLoadingItems')
 </script>
 
 <template>
   <aside
-    class="container overflow-y-scroll flex fixed rounded-xl shadow-xl p-6 mt-28 mr-10 flex-col bg-white"
+    v-if="!isLoading"
+    class="flex flex-col container rounded-xl shadow-xl py-2 px-4 mt-28 mr-4 bg-white overflow-hidden"
   >
     <Parameter
       v-for="parameter in parameters"
       :key="parameter.id"
-      class="my-2 w-48"
+      class="my-2 w-64"
       v-bind="parameter"
     />
   </aside>
+  <ParameterSkeleton v-else :count="17" />
 </template>
 
 <style scoped>
 .container {
-  width: 14% !important;
-  height: 85%;
+  width: 19% !important;
+  height: calc(100vh - 120px);
+  overflow-y: auto;
 }
 
 .container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.container::-webkit-scrollbar-track {
-  border-radius: 5px;
-  background-color: rgba(240, 240, 240, 0.842);
+  width: 4px;
 }
 
 .container::-webkit-scrollbar-thumb {

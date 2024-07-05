@@ -1,11 +1,11 @@
 <script setup>
 import { onMounted, ref, watch, reactive, provide, computed } from 'vue'
 import axios from 'axios'
+import { useRoute } from 'vue-router'
 
-import Header from './components/Header.vue'
-import Drawer from './components/Drawer.vue'
+const route = useRoute()
 
-const pageUrl = window.location.href.split('/')[3]
+const categoryUrl = window.location.href.split('/')[4]
 
 const items = ref([])
 const cartItems = ref([])
@@ -17,7 +17,6 @@ const parameters = ref([])
 
 const totalItems = ref(0)
 const totalPages = ref(0)
-const showDrawer = ref(false)
 
 const isLoading = ref(true)
 
@@ -29,6 +28,8 @@ const filters = reactive({
   page: 1,
   limit: 16
 })
+
+const isAuth = ref(true)
 
 const cartDiscount = computed(() =>
   cartItems.value.reduce((sum, item) => sum + item.price * item.cartCount * 0.05, 0)
@@ -55,16 +56,19 @@ const onChangeSearchInput = (event) => {
 const fetchItems = async () => {
   try {
     const params = {
+      type: route.params.id,
       sortBy: filters.sortBy,
       page: filters.page,
       limit: filters.limit
     }
 
+    const url = 'https://6a17866731ff6fbf.mokky.dev/products'
+
     if (filters.searchQuery) {
       params.name = `*${filters.searchQuery}*`
     }
 
-    const { data } = await axios.get('https://6a17866731ff6fbf.mokky.dev/products', {
+    const { data } = await axios.get(url, {
       params
     })
 
@@ -77,18 +81,33 @@ const fetchItems = async () => {
       cartItemId: null
     }))
 
-    totalItems.value = data.meta.total_items
     totalPages.value = data.meta.total_pages
+    totalItems.value = data.meta.total_items
   } catch (err) {
     console.log(err)
   }
 }
 
-const fetchStoks = async () => {
+const fetchCartItems = async () => {
   try {
-    const { data } = await axios.get('https://6a17866731ff6fbf.mokky.dev/stoks')
+    const { data } = await axios.get('https://6a17866731ff6fbf.mokky.dev/cart')
 
-    stoks.value = data
+    items.value = items.value.map((item) => {
+      const inCart = data.find((favorite) => favorite.itemId === item.id)
+
+      if (!inCart) {
+        return item
+      }
+
+      return {
+        ...item,
+        cartCount: inCart.cartCount,
+        isAddedToCart: true,
+        cartItemId: inCart.id
+      }
+    })
+
+    cartItems.value = data
   } catch (err) {
     console.log(err)
   }
@@ -116,6 +135,16 @@ const fetchFavoriteItems = async () => {
   }
 }
 
+const fetchStoks = async () => {
+  try {
+    const { data } = await axios.get('https://6a17866731ff6fbf.mokky.dev/stoks')
+
+    stoks.value = data
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 const fetchParameters = async () => {
   try {
     const { data } = await axios.get('https://6a17866731ff6fbf.mokky.dev/parameters')
@@ -124,14 +153,6 @@ const fetchParameters = async () => {
   } catch (err) {
     console.log(err)
   }
-}
-
-const openDrawer = () => {
-  showDrawer.value = true
-}
-
-const closeDrawer = () => {
-  showDrawer.value = false
 }
 
 const deleteItemFromCart = async (id) => {
@@ -161,7 +182,7 @@ const createOrder = async () => {
       .slice(-6)
 
     isCreatingOrder.value = true
-    const { data } = await axios.post(`https://6a17866731ff6fbf.mokky.dev/orders`, {
+    const { data } = await axios.post(`https://6a17866731ff6fbf.mokky.dev/orders?sortBy=-id`, {
       items: cartItems.value,
       totalPrice: cartSum.value,
       uid,
@@ -212,16 +233,40 @@ const reduceItemArrayAmount = (id) => {
   })
 }
 
-onMounted(async () => {
-  isLoading.value = true
-  await fetchItems()
+const fetchData = async (categoryId) => {
+  if (categoryId) {
+    await fetchItems(categoryId)
+  } else {
+    await fetchItems()
+  }
   await fetchFavoriteItems()
   await fetchStoks()
   await fetchParameters()
+  await fetchCartItems()
+}
+
+onMounted(async () => {
+  isLoading.value = true
+  await fetchData()
   isLoading.value = false
 })
 
-watch(filters, fetchItems)
+watch(
+  () => route.params.id,
+  async () => {
+    isLoading.value = true
+    filters.page = 1
+    await fetchData()
+    isLoading.value = false
+  }
+)
+
+watch(filters, async () => {
+  isLoading.value = true
+  await fetchData()
+  isLoading.value = false
+})
+
 watch(cartItems, () => {
   items.value = items.value.map((item) => ({
     ...item,
@@ -240,11 +285,8 @@ provide('items', {
 provide('onChangeSelect', onChangeSelect)
 provide('onChangeSearchInput', onChangeSearchInput)
 provide('isLoadingItems', isLoading)
-provide('pageUrl', pageUrl)
 provide('cart', {
   cartItems,
-  closeDrawer,
-  openDrawer,
   deleteItemFromCart,
   cartSum,
   createOrder,
@@ -254,19 +296,17 @@ provide('cart', {
   cartDiscount,
   totalPrice
 })
-
+provide('categoryUrl', categoryUrl)
 provide('category', category)
+provide('userInfo', {
+  isAuth,
+  name: 'Alex',
+  uid: '12131'
+})
 </script>
 
 <template>
-  <Drawer v-if="showDrawer" />
-  <div class="mx-24 m-auto rounded-xl">
-    <Header @open-drawer="openDrawer" :cart-sum="cartSum" />
-
-    <div class="flex">
-      <router-view></router-view>
-    </div>
-  </div>
+  <router-view></router-view>
 </template>
 
 <style scoped></style>

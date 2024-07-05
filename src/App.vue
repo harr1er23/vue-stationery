@@ -3,9 +3,6 @@ import { onMounted, ref, watch, reactive, provide, computed } from 'vue'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
 
-import Header from './components/Header.vue'
-import Drawer from './components/Drawer.vue'
-
 const route = useRoute()
 
 const categoryUrl = window.location.href.split('/')[4]
@@ -20,7 +17,6 @@ const parameters = ref([])
 
 const totalItems = ref(0)
 const totalPages = ref(0)
-const showDrawer = ref(false)
 
 const isLoading = ref(true)
 
@@ -32,6 +28,8 @@ const filters = reactive({
   page: 1,
   limit: 16
 })
+
+const isAuth = ref(true)
 
 const cartDiscount = computed(() =>
   cartItems.value.reduce((sum, item) => sum + item.price * item.cartCount * 0.05, 0)
@@ -155,14 +153,6 @@ const fetchParameters = async () => {
   } catch (err) {
     console.log(err)
   }
-}
-
-const openDrawer = () => {
-  showDrawer.value = true
-}
-
-const closeDrawer = () => {
-  showDrawer.value = false
 }
 
 const deleteItemFromCart = async (id) => {
@@ -297,8 +287,6 @@ provide('onChangeSearchInput', onChangeSearchInput)
 provide('isLoadingItems', isLoading)
 provide('cart', {
   cartItems,
-  closeDrawer,
-  openDrawer,
   deleteItemFromCart,
   cartSum,
   createOrder,
@@ -310,17 +298,15 @@ provide('cart', {
 })
 provide('categoryUrl', categoryUrl)
 provide('category', category)
+provide('userInfo', {
+  isAuth,
+  name: 'Alex',
+  uid: '12131'
+})
 </script>
 
 <template>
-  <Drawer v-if="showDrawer" />
-  <div class="mx-24 m-auto rounded-xl">
-    <Header @open-drawer="openDrawer" :cart-sum="cartSum" />
-
-    <div class="flex">
-      <router-view></router-view>
-    </div>
-  </div>
+  <router-view></router-view>
 </template>
 
 <style scoped></style>

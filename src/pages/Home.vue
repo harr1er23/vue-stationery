@@ -4,8 +4,7 @@ import { inject } from 'vue'
 import ItemsList from '../components/ItemsList.vue'
 // import Carousel from '../components/Carousel.vue'
 import ItemsSkeleton from '../components/ItemsSkeleton.vue'
-import Search from '../components/Search.vue'
-import SelectFilter from '../components/SelectFilter.vue'
+// import SelectFilter from '../components/SelectFilter.vue'
 // import BannerSkeleton from '../components/BannerSkeleton.vue'
 import StoksList from '../components/StoksList.vue'
 import ParametersList from '../components/ParametersList.vue'
@@ -14,33 +13,33 @@ import Pagination from '../components/Pagination.vue'
 const stoks = inject('stoks')
 const { items, totalItems, totalPages } = inject('items')
 const isLoading = inject('isLoadingItems')
-const category = inject('category')
 const filters = inject('filters')
 </script>
 
 <template>
   <ParametersList />
 
-  <main class="content fixed rounded-xl shadow-xl p-8 mt-28 bg-white overflow-hidden">
+  <main class="content rounded-xl shadow-xl p-4 mt-28 bg-white overflow-hidden">
     <div class="flex flex-col scroll-container overflow-y-auto h-full">
       <!-- <Carousel v-if="!isLoading" /> -->
       <!-- <BannerSkeleton v-else /> -->
 
-      <div v-if="category === 'Все товары'" class="pt-6 pl-10">
-        <div class="flex justify-between items-center">
-          <h2 class="text-3xl font-bold mb-8">Акции</h2>
-        </div>
-
+      <div v-if="!filters.searchQuery">
         <StoksList v-if="!isLoading" :stoks="stoks" />
         <ItemsSkeleton v-else :count="4" />
-      </div>
 
-      <div class="p-10">
-        <div class="flex justify-between items-center">
-          <h2 class="text-3xl font-bold mb-8">{{ category }}</h2>
-          <div class="flex gap-4">
-            <SelectFilter />
-            <Search />
+        <div class="pt-6 pl-10">
+          <div class="flex justify-between items-center">
+            <h2 class="text-3xl font-bold mb-8">Акции</h2>
+          </div>
+        </div>
+
+        <div class="p-10">
+          <div class="flex justify-between items-center">
+            <h2 class="text-3xl font-bold mb-8">Возможно вам понравится</h2>
+            <div class="flex gap-4">
+              <SelectFilter />
+            </div>
           </div>
         </div>
       </div>
@@ -61,8 +60,7 @@ const filters = inject('filters')
 
 <style scoped>
 .content {
-  width: 75%;
-  margin-left: 270px;
+  width: 85%;
 }
 
 .scroll-container {

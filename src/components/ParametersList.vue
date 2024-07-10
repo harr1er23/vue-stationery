@@ -25,7 +25,7 @@ const isLoading = inject('isLoadingItems')
 
 <style scoped>
 .container {
-  width: 19% !important;
+  width: 19%;
   height: calc(100vh - 120px);
   overflow-y: auto;
 }

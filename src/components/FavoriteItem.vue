@@ -1,19 +1,61 @@
 <script setup>
-defineProps({
+import axios from 'axios'
+import { inject } from 'vue'
+
+const props = defineProps({
   id: Number,
   mainPhoto: String,
   name: String,
   price: Number,
   isFavorite: Boolean,
   isAddedToCart: Boolean,
-  favoriteId: Number,
+  itemId: Number,
   cartCount: Number
 })
+
+const favoriteList = inject('favoriteList')
+const { items } = inject('items')
+
+const onClickFavorite = async () => {
+  await deleteFromFavorite()
+
+  favoriteList.value = favoriteList.value.filter((favoriteItem) => favoriteItem.id !== props.id)
+
+  items.value = items.value.map((item) => {
+    if (item.favoriteId === props.id) {
+      return {
+        ...item,
+        isFavorite: false
+      }
+    }
+
+    return item
+  })
+}
+
+const deleteFromFavorite = async () => {
+  try {
+    axios.delete(`https://6a17866731ff6fbf.mokky.dev/favorite/${props.id}`)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const onClickPlus = async () => {
+
+}
+
+const onClickMinus = async () => {
+
+}
+
+const onClickAddToCart = async () => {
+
+}
 </script>
 
 <template>
   <div
-    v-if="isFavorite"
     class="flex my-4 mr-2 flex-col relative border border-slate-100 w-72 rounded-3xl cursor-pointer p-8 hover:-translate-y-2 hover:shadow-xl transition bg-white"
   >
     <img

@@ -1,12 +1,13 @@
 <script setup>
-import axios from 'axios'
+// import axios from 'axios'
+import { useCartStore } from '@/stores/ItemsStore'
 import { inject } from 'vue'
 
 const isLoadingItems = inject('isLoadingItems')
 
-const { deleteItemFromCart, cartItems, reduceCartArrayAmount, reduceItemArrayAmount } =
-  inject('cart')
-const { items } = inject('items')
+// const { deleteItemFromCart, cartItems, reduceCartArrayAmount, reduceItemArrayAmount } =
+//   inject('cart')
+// const { items } = inject('items')
 
 const props = defineProps({
   cartCount: Number,
@@ -17,62 +18,64 @@ const props = defineProps({
   price: Number
 })
 
-const onClickMinus = () => {
-  if (props.cartCount - 1 > 0) {
-    axios.patch(`https://6a17866731ff6fbf.mokky.dev/cart/${props.id}`, {
-      cartCount: props.cartCount - 1
-    })
+// const onClickMinus = () => {
+//   if (props.cartCount - 1 > 0) {
+//     axios.patch(`https://6a17866731ff6fbf.mokky.dev/cart/${props.id}`, {
+//       cartCount: props.cartCount - 1
+//     })
 
-    reduceCartArrayAmount(props.id)
-  } else {
-    axios.delete(`https://6a17866731ff6fbf.mokky.dev/cart/${props.id}`)
+//     reduceCartArrayAmount(props.id)
+//   } else {
+//     axios.delete(`https://6a17866731ff6fbf.mokky.dev/cart/${props.id}`)
 
-    items.value = items.value.map((item) => {
-      if (item.cartItemId === props.id) {
-        return {
-          ...item,
-          isAddedToCart: false
-        }
-      }
+//     items.value = items.value.map((item) => {
+//       if (item.cartItemId === props.id) {
+//         return {
+//           ...item,
+//           isAddedToCart: false
+//         }
+//       }
 
-      return item
-    })
+//       return item
+//     })
 
-    cartItems.value = cartItems.value.filter((cartItem) => cartItem.id !== props.id)
-  }
+//     cartItems.value = cartItems.value.filter((cartItem) => cartItem.id !== props.id)
+//   }
 
-  reduceItemArrayAmount(props.id)
-}
+//   reduceItemArrayAmount(props.id)
+// }
 
-const onClickPlus = () => {
-  if (props.cartCount < 30) {
-    axios.patch(`https://6a17866731ff6fbf.mokky.dev/cart/${props.id}`, {
-      cartCount: props.cartCount + 1
-    })
+// const onClickPlus = () => {
+//   if (props.cartCount < 30) {
+//     axios.patch(`https://6a17866731ff6fbf.mokky.dev/cart/${props.id}`, {
+//       cartCount: props.cartCount + 1
+//     })
 
-    cartItems.value = cartItems.value.map((cartItem) => {
-      if (cartItem.id === props.id) {
-        return {
-          ...cartItem,
-          cartCount: props.cartCount + 1
-        }
-      }
+//     cartItems.value = cartItems.value.map((cartItem) => {
+//       if (cartItem.id === props.id) {
+//         return {
+//           ...cartItem,
+//           cartCount: props.cartCount + 1
+//         }
+//       }
 
-      return cartItem
-    })
+//       return cartItem
+//     })
 
-    items.value = items.value.map((obj) => {
-      if (obj.cartItemId === props.id) {
-        return {
-          ...obj,
-          cartCount: obj.cartCount + 1
-        }
-      }
+//     items.value = items.value.map((obj) => {
+//       if (obj.cartItemId === props.id) {
+//         return {
+//           ...obj,
+//           cartCount: obj.cartCount + 1
+//         }
+//       }
 
-      return obj
-    })
-  }
-}
+//       return obj
+//     })
+//   }
+// }''
+
+const cartStore = useCartStore()
 </script>
 
 <template>
@@ -92,13 +95,13 @@ const onClickPlus = () => {
 
     <div class="flex ml-auto">
       <div class="flex rounded-xl items-center p-2 bg-slate-100 mr-4">
-        <div class="w-6 cursor-pointer" @click="() => onClickMinus(props.id)">
+        <div class="w-6 cursor-pointer" @click="() => cartStore.minusCartItem(props.id)">
           <img src="/minus.svg" alt="Minus" />
         </div>
 
         <span class="mx-2">{{ cartCount }}</span>
 
-        <div class="w-6 cursor-pointer" @click="() => onClickPlus(props.id)">
+        <div class="w-6 cursor-pointer" @click="() => cartStore.plusCartItem(props.id)">
           <img src="/plus.svg" alt="Plus" />
         </div>
       </div>

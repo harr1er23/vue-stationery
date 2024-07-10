@@ -23,7 +23,7 @@ defineProps({
       @click="onClickFavorite"
       :src="!isFavorite ? '/like-1.svg' : '/like-2.svg'"
       alt="Like 1"
-      class="absolute top-8 left-8"
+      class="absolute top-10 left-10"
     />
     <img :src="mainPhoto" alt="Item" class="w-54 self-center" />
 

@@ -48,7 +48,13 @@ const addToCart = async (item) => {
 const addToFavorite = async (item) => {
   try {
     const { data } = await axios.post('https://6a17866731ff6fbf.mokky.dev/favorite', {
-      itemId: item.id
+      itemId: item.id,
+      mainPhoto: item.mainPhoto,
+      name: item.name,
+      price: item.price,
+      isFavorite: true,
+      isAddedToCart: item.isAddedToCart,
+      cartCount: item.cartCount
     })
 
     item.favoriteId = data.id

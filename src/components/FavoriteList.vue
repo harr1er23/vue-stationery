@@ -1,13 +1,13 @@
 <script setup>
-import { inject } from 'vue'
-
 import FavoriteItem from './FavoriteItem.vue'
 
-const { items } = inject('items')
+defineProps({
+  items: Array
+})
 </script>
 
 <template>
-  <div class="grid grid-cols-5 gap-10" v-auto-animate>
-    <FavoriteItem v-for="item in items" :key="item.id" v-bind="item" :count="1" />
+  <div class="grid grid-cols-5 gap-10">
+    <FavoriteItem v-for="item in items" :key="item.id" v-bind="item" />
   </div>
 </template>

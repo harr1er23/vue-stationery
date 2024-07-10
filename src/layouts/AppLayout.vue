@@ -18,7 +18,7 @@ provide('closeDrawer', closeDrawer)
 
 <template>
   <Drawer v-if="showDrawer" />
-  <div class="flex flex-col items-center rounded-xl mx-24">
+  <div class="flex flex-col rounded-xl mx-24">
     <Header @open-drawer="openDrawer" :cart-sum="cartSum" />
 
     <div class="flex">

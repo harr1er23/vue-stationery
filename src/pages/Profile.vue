@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue'
 
 import ItemsSkeleton from '../components/ItemsSkeleton.vue'
 import OrdersList from '../components/OrdersList.vue'
+import ClearPage from '../components/ClearPage.vue'
 
 const ordersList = ref([])
 
@@ -26,18 +27,19 @@ onMounted(async () => {
   <main class="rounded-xl shadow-xl p-4 mt-28 bg-white overflow-hidden">
     <div class="flex flex-col scroll-container overflow-y-auto h-full">
       <ItemsSkeleton v-if="isLoading" :count="6" />
+      <ClearPage
+        v-else-if="!isLoading && !ordersList.length"
+        title="У вас нет заказов"
+        description="Оформите хотя бы одну покупку"
+      />
       <OrdersList v-else :ordersList="ordersList" />
     </div>
   </main>
 </template>
 
 <style scoped>
-.content {
-  width: 100%;
-}
-
 .scroll-container {
-  height: calc(100vh - 170px);
+  height: calc(100vh - 150px);
   overflow-y: auto;
 }
 </style>

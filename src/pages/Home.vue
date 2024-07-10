@@ -28,11 +28,11 @@ const filters = inject('filters')
         <StoksList v-if="!isLoading" :stoks="stoks" />
         <ItemsSkeleton v-else :count="4" />
 
-        <div class="pt-6 pl-10">
-          <div class="flex justify-between items-center">
-            <h2 class="text-3xl font-bold mb-8">Акции</h2>
-          </div>
-        </div>
+        <!--<div class="pt-6 pl-10">
+            <div class="flex justify-between items-center">
+              <h2 class="text-3xl font-bold mb-8">Акции</h2>
+            </div>
+          </div>-->
 
         <div class="p-10">
           <div class="flex justify-between items-center">
@@ -59,10 +59,6 @@ const filters = inject('filters')
 </template>
 
 <style scoped>
-.content {
-  width: 85%;
-}
-
 .scroll-container {
   height: calc(100vh - 170px);
   overflow-y: auto;

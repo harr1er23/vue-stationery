@@ -1,11 +1,15 @@
 <script setup>
 import { inject } from 'vue'
 
-const { totalPrice, cartSum, cartDiscount, cartButtonDisabled, createOrder } = inject('cart')
+const { totalPrice, cartSum, cartDiscount, cartButtonDisabled, createOrder, cartItems } =
+  inject('cart')
 </script>
 
 <template>
-  <div class="flex absolute w-96 bottom-10 left-o flex-col gap-4 mt-7">
+  <div
+    v-if="cartItems.length !== 0 && !cartButtonDisabled"
+    class="flex absolute w-96 bottom-10 left-o flex-col gap-4 mt-7"
+  >
     <div class="flex gap-2">
       <span>Сумма:</span>
       <div class="flex-1 border-b border-dashed"></div>

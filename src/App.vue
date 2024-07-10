@@ -23,7 +23,6 @@ const isLoading = ref(true)
 const isCreatingOrder = ref(false)
 
 const filters = reactive({
-  sortBy: 'name',
   searchQuery: '',
   page: 1,
   limit: 16
@@ -39,7 +38,7 @@ const cartSum = computed(() =>
   cartItems.value.reduce((sum, item) => sum + item.price * item.cartCount, 0)
 )
 
-const totalPrice = computed(() => (cartSum.value + cartDiscount.value).toFixed(0))
+const totalPrice = computed(() => cartSum.value - cartDiscount.value.toFixed(0))
 
 const cartIsEmpty = computed(() => cartItems.value.length === 0)
 
@@ -57,7 +56,6 @@ const fetchItems = async () => {
   try {
     const params = {
       type: route.params.id,
-      sortBy: filters.sortBy,
       page: filters.page,
       limit: filters.limit
     }
